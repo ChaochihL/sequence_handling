@@ -13,6 +13,7 @@ OUT_DIR=
 PROJECT=
 
 #   What email should we use for job notifications?
+#   Only fill out if using a queue system
 EMAIL=
 
 #   What encoding is used for quality values?
