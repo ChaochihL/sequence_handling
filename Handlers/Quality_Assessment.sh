@@ -61,13 +61,13 @@ function Quality_Assessment() {
     local project="$3" # What do we call our results?
     local size="$4" # What is the size of the covered region?
     mkdir -p "${out}/HTML_Files" "${out}/Zip_Files" # Make our output directories
-    parallel "fastqc --outdir ${out} {}" :::: "${sampleList}" # Run FastQC in parallel
+    cat "${sampleList}" | parallel "fastqc --outdir ${out} {}" # Run FastQC in parallel
     # Make a list of all the zip files
     local zipList=$(find "${out}" -name "*.zip" | sort)
     # Add the header to the quality summary file
     echo -e "Sample name\tEncoding\tRead length\tNumber of reads\tRead depth\t%GC\tDeduplicated percentage\tPer base sequence quality\tPer tile sequence quality\tPer sequence quality scores\tPer base sequence content\tPer sequence GC content\tPer base N content\tSequence length distribution\tSequence duplication levels\tOverrepresented sequences\tAdapter content\tKmer content" > "${out}/${project}_quality_summary_unfinished.txt"
     # Calculate stats and add a row to the summary file for each sample
-    parallel -v summarizeQC {} "${size}" "${out}" "${project}" :::: "${zipList}"
+    parallel -v summarizeQC {} "${size}" "${out}" "${project}" ::: "${zipList}"
     # Add the header to a new file to contain the sorted list
     echo -e "Sample name\tEncoding\tRead length\tNumber of reads\tRead depth\t%GC\tDeduplicated percentage\tPer base sequence quality\tPer tile sequence quality\tPer sequence quality scores\tPer base sequence content\tPer sequence GC content\tPer base N content\tSequence length distribution\tSequence duplication levels\tOverrepresented sequences\tAdapter content\tKmer content" > "${out}/${project}_quality_summary.txt"
     # Sort the summary file based on sample name
