@@ -224,7 +224,7 @@ case "${ROUTINE}" in
             then echo "No regions file found, assuming whole-genome sequencing data..." >&2
             else echo "Using regions file at ${REGIONS_FILE} for exome capture data..." >&2
         fi
-        echo "source ${CONFIG} && source ${SEQUENCE_HANDLING}/Handlers/Coverage_Mapping.sh && Coverage_Mapping ${BAM_LIST} ${OUT_DIR} ${REGIONS_FILE} ${PROJECT}" | qsub -l "${CM_QSUB}" -e "${ERROR}" -o "${ERROR}" -m abe -M "${EMAIL}" -N "${PROJECT}"_Coverage_Mapping
+        source ${CONFIG} && source ${SEQUENCE_HANDLING}/Handlers/Coverage_Mapping.sh && Coverage_Mapping ${BAM_LIST} ${OUT_DIR} ${REGIONS_FILE} ${PROJECT}
         ;;
     6|Haplotype_Caller )
         echo "$(basename $0): Calling SNPs with GATK Haplotype_Caller..." >&2
